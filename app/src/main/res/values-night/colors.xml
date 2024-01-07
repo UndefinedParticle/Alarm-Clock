@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="customTextColor">#FFFFFFFF</color>
+    <color name="customBgColor">#FF000000</color>
+    <color name="circleBgColor">#9F232323</color>
+
+
+    <color name="switchTrackColor">#CCCCCC</color> <!-- Default track color -->
+    <color name="switchThumbColor">#FFFFFF</color> <!-- Default thumb color -->
+    <color name="switchTrackSelectedColor">#FF4081</color> <!-- Selected track color -->
+    <color name="switchThumbSelectedColor">#4A94F2</color> <!-- Selected thumb color -->
+
+
+</resources>

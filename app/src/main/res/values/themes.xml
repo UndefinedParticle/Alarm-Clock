@@ -1,0 +1,48 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AlarmClock" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:colorPrimaryDark">@color/white</item>
+    </style>
+
+    <style name="Theme.AlarmClock" parent="Base.Theme.AlarmClock" />
+
+    <style name="customBackground">
+
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+
+    </style>
+
+    <style name="CustomDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorAccent">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@drawable/linear_background</item>
+
+        <!-- Add more style attributes as needed -->
+    </style>
+
+    <style name="AlertDialogButtons">
+        <item name="android:textColor">@color/customTextColor</item>
+        <!-- You can add more button-specific styling here -->
+    </style>
+
+    <style name="AlertDialogPositiveButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/positive_button_background</item>
+    </style>
+
+    <style name="AlertDialogNegativeButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/positive_button_background</item>
+    </style>
+
+    <style name="CustomNumberPicker">
+        <item name="android:textColor">@color/customTextColor</item>
+        <item name="android:colorControlNormal">@color/customTextColor</item>
+    </style>
+
+
+</resources>

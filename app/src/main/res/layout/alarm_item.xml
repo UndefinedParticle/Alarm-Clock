@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.undefinedparticle.alarmclock.models.AlarmModel" />
+
+        <variable
+            name="alarmTime"
+            type="String" />
+
+        <variable
+            name="remainingHours"
+            type="String" />
+
+        <variable
+            name="remainingMinutes"
+            type="String" />
+
+        <variable
+            name="selectedState"
+            type="Boolean" />
+
+        <variable
+            name="selected"
+            type="Boolean" />
+
+        <variable
+            name="deleting"
+            type="Boolean" />
+
+        <variable
+            name="handler"
+            type="com.undefinedparticle.alarmclock.adapters.AlarmAdapter.AlarmViewHolder.ClickHandler" />
+
+
+        <import type="android.view.View"/>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:onClick="@{handler::onClick}"
+        android:onLongClick="@{handler::onLongClick}"
+        android:background="@drawable/item_background"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@{model.alarmTime + ``}"
+                android:textColor="@color/customTextColor"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="07:30 am" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:text="Daily"
+                    android:textColor="@color/customTextColor"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" | "
+                    android:textColor="@color/customTextColor"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/remainingTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:text="Alarm in 15 hours 30 minutes"
+                    android:textColor="@color/customTextColor"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:visibility="@{model.deleting? View.GONE : View.VISIBLE}"
+            tools:visibility="visible"
+            app:thumbTint="@drawable/switch_thumb_selector" />
+
+        <ImageView
+            android:id="@+id/selectButton"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:visibility="@{model.deleting? View.VISIBLE : View.GONE}"
+            tools:visibility="gone"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@{model.selected?@drawable/selected_button:@drawable/unselected_button}"
+            tools:background="@drawable/selected_button" />
+
+
+    </RelativeLayout>
+
+</layout>
