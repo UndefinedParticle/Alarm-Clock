@@ -60,11 +60,21 @@ class DbHelper(context: Context) :
         return db.update(DbQuery.TABLE_NAME, values, whereClause, null)
     }
 
-    fun deleteData(id: Int): Int {
-        val writableDb = writableDatabase
+    /*fun deleteData(id: Int): Int {
+        val writableDb = this.writableDatabase
 
         return writableDb.delete(DbQuery.TABLE_NAME, id.toString(), null)
+    }*/
+
+    fun deleteData(id: Int): Int {
+        val writableDb = this.writableDatabase
+        val whereClause = "${DbQuery.ALARM_ID} = ?"
+        val whereArgs = arrayOf(id.toString())
+
+        return writableDb.delete(DbQuery.TABLE_NAME, whereClause, whereArgs)
     }
+
+
 
     fun getData(id: Int): AlarmModel {
         val db = this.readableDatabase

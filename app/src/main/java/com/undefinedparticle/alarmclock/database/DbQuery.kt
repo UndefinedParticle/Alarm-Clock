@@ -3,7 +3,7 @@ package com.undefinedparticle.alarmclock.database
 class DbQuery {
 
     companion object {
-        var DB_VERSION:Int = 6
+        var DB_VERSION:Int = 8
         var DB_NAME = "AlarmClock_DB"
         var TABLE_NAME = "All_Alarms"
         var ALARM_ID = "ALARM_ID"

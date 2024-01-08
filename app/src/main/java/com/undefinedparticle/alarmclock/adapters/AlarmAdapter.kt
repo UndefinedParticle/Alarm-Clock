@@ -36,7 +36,7 @@ class AlarmAdapter(val context: Context, private var alarmList: List<AlarmModel>
         holder.binding.alarmTime = alarmModel.getAlarmTime()
         holder.binding.selected = false
         holder.binding.deleting = false
-        holder.binding.handler = holder.ClickHandler(context, holder)
+        holder.binding.handler = holder.ClickHandler(context, holder, position)
 
         remainingHours = alarmModel.getRemainingHours()
         remainingMinutes = alarmModel.getRemainingMinutes()
@@ -58,6 +58,10 @@ class AlarmAdapter(val context: Context, private var alarmList: List<AlarmModel>
         notifyDataSetChanged()
     }
 
+    fun getAlarmData(): List<AlarmModel>{
+        return alarmList
+    }
+
     fun updateItemsOnLongClick() {
         for (alarmModel in alarmList) {
             alarmModel.setDeleting(!alarmModel.getDeleting())
@@ -74,7 +78,8 @@ class AlarmAdapter(val context: Context, private var alarmList: List<AlarmModel>
 
         inner class ClickHandler(
             private val context: Context,
-            private val holder: AlarmViewHolder
+            private val holder: AlarmViewHolder,
+            private val position: Int
         ) {
             // Add a long click listener to itemView
             fun onLongClick(view: View): Boolean {
@@ -88,7 +93,9 @@ class AlarmAdapter(val context: Context, private var alarmList: List<AlarmModel>
             }
 
             fun onClick(view: View) {
-                holder.binding.selected = holder.binding.selected?.not() ?: false
+                //holder.binding.selected = holder.binding.selected?.not() ?: false
+                alarmList[position].setSelected(!alarmList[position].getSelected())
+                notifyDataSetChanged()
                 //Here I want to toggle "selected" variable in that particular alarmModel
             }
 

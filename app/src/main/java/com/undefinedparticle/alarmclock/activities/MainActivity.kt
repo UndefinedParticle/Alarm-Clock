@@ -1,6 +1,7 @@
 package com.undefinedparticle.alarmclock.activities
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -30,9 +31,10 @@ class MainActivity : AppCompatActivity() {
     private var remainingH: Int = 0
     private var remainingM: Int = 0
     private var timeDifferenceMillis: Long = 0
-    private lateinit var db: DbHelper
     private lateinit var alarmModel: AlarmModel
     companion object {
+        lateinit var db: DbHelper
+
         lateinit var alarmViewModel: AlarmViewModel
             private set
     }
@@ -65,6 +67,7 @@ class MainActivity : AppCompatActivity() {
 
         alarmAdapter = AlarmAdapter(this,alarmList)
         binding.alarmRecyclerView.adapter = alarmAdapter
+        binding.handler = ClickHandler(this)
 
         binding.addButton.setOnClickListener {
             showTimePickerDialog()
@@ -81,6 +84,29 @@ class MainActivity : AppCompatActivity() {
             binding.deleting = it
 
         })
+
+    }
+
+    inner class ClickHandler(private val context: Context){
+
+        fun deleteAlarm(view: View){
+
+            val newList = alarmAdapter.getAlarmData()
+
+            for(pos in newList.indices){
+                val model = newList[pos]
+                if(model.getSelected()){
+                    db.deleteData(pos)
+
+                    Log.d("deleteAlarm","pos: $pos");
+                }
+            }
+
+            alarmList = db.getAllData()
+            alarmAdapter.setData(alarmList)
+
+            alarmViewModel.deleting.value = false
+        }
 
     }
 
@@ -111,55 +137,8 @@ class MainActivity : AppCompatActivity() {
             .setTitle("Select Time")
             .setPositiveButton("OK") { _, _ ->
 
+                addAlarmData(hourPicker.value,minutePicker.value,amPmPicker.value)
 
-                val currentCalendar = Calendar.getInstance()
-                val selectedCalendar = Calendar.getInstance()
-
-                if(amPmPicker.value == 1){
-                    //val diff = 12 - (hourPicker.value % 12);
-                    if(hourPicker.value == 12){
-                        selectedCalendar.set(Calendar.HOUR_OF_DAY, 12)
-                    }else{
-                        selectedCalendar.set(Calendar.HOUR_OF_DAY, hourPicker.value + 12)
-                    }
-
-                }else{
-                    if(hourPicker.value == 12){
-                        selectedCalendar.set(Calendar.HOUR_OF_DAY, 0)
-                    } else {
-                        selectedCalendar.set(Calendar.HOUR_OF_DAY, hourPicker.value)
-                    }
-                }
-
-                // Set the selected time in the calendar
-                selectedCalendar.set(Calendar.MINUTE, minutePicker.value)
-
-                // Handle the selected time
-                selectedTime = "${hourPicker.value}:${String.format("%02d", minutePicker.value)}"
-                amPm = if (amPmPicker.value == 0) "AM" else "PM"
-
-                // Do something with the selected time
-                val timeInMillis = selectedCalendar.timeInMillis;
-                timeDifferenceMillis = selectedCalendar.timeInMillis - currentCalendar.timeInMillis
-                val minutes = (timeDifferenceMillis / (1000 * 60)).toInt()
-
-                // Calculate hours and remaining minutes
-                val hours = minutes / 60
-                val remainingMinutes = minutes % 60
-                remainingH = hours
-                remainingM = remainingMinutes
-
-                Log.d("timeInMillis","timeInMillis: $timeInMillis remainingH: $remainingH remainingM: $remainingM");
-
-                val newAlarm = AlarmModel()
-                newAlarm.setAlarmTime("$selectedTime $amPm")
-                newAlarm.setRemainingHours(remainingH)
-                newAlarm.setRemainingMinutes(remainingM)
-
-                db.insertData(alarmList.size+1,"$selectedTime $amPm",remainingH.toString(),remainingM.toString(),0)
-                // Set the properties of the new alarm as needed
-                alarmList += newAlarm
-                alarmAdapter.setData(alarmList)
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
@@ -177,6 +156,59 @@ class MainActivity : AppCompatActivity() {
         }
 
         alertDialog.show()
+    }
+
+    private fun addAlarmData(hourVal: Int, minuteVal: Int, amPmVal: Int){
+
+        val currentCalendar = Calendar.getInstance()
+        val selectedCalendar = Calendar.getInstance()
+
+        if(amPmVal == 1){
+            //val diff = 12 - (hourPicker.value % 12);
+            if(hourVal == 12){
+                selectedCalendar.set(Calendar.HOUR_OF_DAY, 12)
+            }else{
+                selectedCalendar.set(Calendar.HOUR_OF_DAY, hourVal + 12)
+            }
+
+        }else{
+            if(hourVal == 12){
+                selectedCalendar.set(Calendar.HOUR_OF_DAY, 0)
+            } else {
+                selectedCalendar.set(Calendar.HOUR_OF_DAY, hourVal)
+            }
+        }
+
+        // Set the selected time in the calendar
+        selectedCalendar.set(Calendar.MINUTE, minuteVal)
+
+        // Handle the selected time
+        selectedTime = "${hourVal}:${String.format("%02d", minuteVal)}"
+        amPm = if (amPmVal == 0) "AM" else "PM"
+
+        // Do something with the selected time
+        val timeInMillis = selectedCalendar.timeInMillis;
+        timeDifferenceMillis = selectedCalendar.timeInMillis - currentCalendar.timeInMillis
+        val minutes = (timeDifferenceMillis / (1000 * 60)).toInt()
+
+        // Calculate hours and remaining minutes
+        val hours = minutes / 60
+        val remainingMinutes = minutes % 60
+        remainingH = hours
+        remainingM = remainingMinutes
+
+        Log.d("timeInMillis","timeInMillis: $timeInMillis remainingH: $remainingH remainingM: $remainingM");
+
+        val newAlarm = AlarmModel()
+        newAlarm.setAlarmTime("$selectedTime $amPm")
+        newAlarm.setRemainingHours(remainingH)
+        newAlarm.setRemainingMinutes(remainingM)
+
+        db.insertData(alarmList.size+1,"$selectedTime $amPm",remainingH.toString(),remainingM.toString(),0)
+        // Set the properties of the new alarm as needed
+        alarmList += newAlarm
+        alarmAdapter.setData(alarmList)
+
     }
 
 
