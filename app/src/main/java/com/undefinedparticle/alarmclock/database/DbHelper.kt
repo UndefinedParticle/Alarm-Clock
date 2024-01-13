@@ -73,6 +73,10 @@ class DbHelper(context: Context) :
 
         return writableDb.delete(DbQuery.TABLE_NAME, whereClause, whereArgs)
     }
+    fun deleteAllData(){
+        val writableDb = this.writableDatabase
+        writableDb.execSQL(DbQuery.DELETE_ALL)
+    }
 
 
 

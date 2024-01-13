@@ -92,14 +92,25 @@ class MainActivity : AppCompatActivity() {
         fun deleteAlarm(view: View){
 
             val newList = alarmAdapter.getAlarmData()
+            var tempList: List<AlarmModel> = ArrayList()
 
             for(pos in newList.indices){
                 val model = newList[pos]
                 if(model.getSelected()){
-                    db.deleteData(pos)
+                    //db.deleteData(pos)
 
-                    Log.d("deleteAlarm","pos: $pos");
+                    //Log.d("deleteAlarm","pos: $pos");
+                }else{
+                    tempList += model
                 }
+            }
+
+            db.deleteAllData()
+
+            for(pos in tempList.indices){
+                val model = tempList[pos]
+
+                db.insertData(pos,model.getAlarmTime(),model.getRemainingHours().toString(),model.getRemainingMinutes().toString(),if (model.getSelected()) 1 else 0)
             }
 
             alarmList = db.getAllData()
@@ -214,7 +225,13 @@ class MainActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        super.onBackPressed()
-        finishAffinity()
+        if (alarmViewModel.deleting.value == true) {
+            alarmViewModel.deleting.value = false
+
+            alarmAdapter.updateItemsOnLongClick()
+        } else {
+            super.onBackPressed()
+            // Keep the existing logic for other cases
+        }
     }
 }
