@@ -3,9 +3,9 @@ package com.undefinedparticle.alarmclock.database
 class DbQuery {
 
     companion object {
-        var DB_VERSION:Int = 9
+        var DB_VERSION:Int = 10
         var DB_NAME = "AlarmClock_DB"
-        var TABLE_NAME = "All_Alarms"
+        var TABLE_NAME = "ALARMS_TABLE"
         var ALARM_ID = "ALARM_ID"
         var ALARM_TIME = "ALARM_TIME"
         var REMAINING_HOURS = "REMAINING_HOURS"

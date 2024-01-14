@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.undefinedparticle.alarmclock.models.AlarmModel
 import com.undefinedparticle.alarmclock.R
 import com.undefinedparticle.alarmclock.activities.MainActivity
+import com.undefinedparticle.alarmclock.database.AlarmsModel
 import com.undefinedparticle.alarmclock.databinding.AlarmItemBinding
 
-class AlarmAdapter(val context: Context, private var alarmList: List<AlarmModel>) :
+class AlarmAdapter(private val context: Context, private var alarmList: List<AlarmsModel>) :
     RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
-    private lateinit var alarmModel: AlarmModel
+    private lateinit var alarmsModel: AlarmsModel
     private var remainingHours: Int = 0
     private var remainingMinutes: Int = 0
 
@@ -30,16 +31,16 @@ class AlarmAdapter(val context: Context, private var alarmList: List<AlarmModel>
     }
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
-        alarmModel = alarmList[position]
+        alarmsModel = alarmList[position]
 
-        holder.binding.model = alarmModel
-        holder.binding.alarmTime = alarmModel.getAlarmTime()
+        holder.binding.model = alarmsModel
+        holder.binding.alarmTime = alarmsModel.alarmTime
         holder.binding.selected = false
         holder.binding.deleting = false
         holder.binding.handler = holder.ClickHandler(context, holder, position)
 
-        remainingHours = alarmModel.getRemainingHours()
-        remainingMinutes = alarmModel.getRemainingMinutes()
+        remainingHours = alarmsModel.remainingHours
+        remainingMinutes = alarmsModel.remainingMinutes
 
         if (remainingHours.toInt() == 0) {
             holder.binding.remainingTime.text = "Alarm in ${kotlin.math.abs(remainingMinutes)} mins"
@@ -53,12 +54,12 @@ class AlarmAdapter(val context: Context, private var alarmList: List<AlarmModel>
         }
     }
 
-    fun setData(newList: List<AlarmModel>) {
+    fun setData(newList: List<AlarmsModel>) {
         alarmList = newList
         notifyDataSetChanged()
     }
 
-    fun getAlarmData(): List<AlarmModel>{
+    fun getAlarmData(): List<AlarmsModel>{
         return alarmList
     }
 

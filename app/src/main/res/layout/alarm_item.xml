@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.undefinedparticle.alarmclock.models.AlarmModel" />
+            type="com.undefinedparticle.alarmclock.database.AlarmsModel" />
 
         <variable
             name="alarmTime"
